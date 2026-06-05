@@ -1,0 +1,31 @@
+[project]
+name = "hartrace"
+version = "0.1.0"
+description = "An MCP server for HTTP traffic analysis with value provenance tracing — token-efficient HAR inspection for AI agents."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["har", "mcp", "http", "traffic-analysis", "provenance", "api-testing", "claude"]
+dependencies = ["fastmcp>=2.0"]
+
+[project.urls]
+Homepage = "https://github.com/rafsanbasunia/hartrace"
+Issues = "https://github.com/rafsanbasunia/hartrace/issues"
+
+[project.scripts]
+hartrace = "har_mcp:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["har_mcp", "har_parser", "provenance", "search"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
