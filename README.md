@@ -1,5 +1,9 @@
 # hartrace
 
+[![PyPI](https://img.shields.io/pypi/v/hartrace)](https://pypi.org/project/hartrace/)
+[![Python](https://img.shields.io/pypi/pyversions/hartrace)](https://pypi.org/project/hartrace/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 An [MCP](https://modelcontextprotocol.io) server for analyzing HTTP traffic captures (HAR files) — built so an AI agent can answer questions about a capture **without** reading the raw JSON into its context window.
 
 Its distinguishing feature is **value provenance tracing**: given any token, cookie, id, or payload field, `hartrace` reconstructs where the value was *produced* (which response set it) and where it was *consumed* (which later requests sent it), as a compact timeline. Every other tool — search, inspection, diffing — is built to return small, structured results with hard size caps, so analysis stays cheap regardless of how large the capture is.
@@ -38,13 +42,16 @@ HAR files are large, deeply nested, and repetitive. The two common ways an AI en
 Requires Python 3.10+.
 
 ```bash
-# from PyPI (once published)
+# recommended — isolated install
 pipx install hartrace
 
-# or zero-install with uv
+# zero-install with uv
 uvx hartrace
 
-# or from source
+# plain pip
+pip install hartrace
+
+# from source
 git clone https://github.com/rafsanbasunia/hartrace
 cd hartrace
 pip install -e .
