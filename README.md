@@ -221,7 +221,7 @@ tests/          pytest suite
 ```json
 {
   "sensitive_headers": ["authorization", "cookie", "set-cookie", "x-csrf-token", "x-api-key"],
-  "redact_sensitive_headers": true,
+  "redact_sensitive_headers": false,
   "entropy_min_len": 24,
   "entropy_bits_min": 3.5
 }
@@ -229,9 +229,9 @@ tests/          pytest suite
 
 | Key | Default | Effect |
 | --- | --- | --- |
-| `sensitive_headers` | common auth headers | Header names to redact by name when `redact_sensitive_headers` is `true`. |
-| `redact_sensitive_headers` | `true` | When `true`, values for headers in `sensitive_headers` are replaced with `<REDACTED len=N>` in inspection output. Set to `false` to see raw values everywhere (useful when you trust your environment and need to inspect the actual tokens). |
-| `entropy_min_len` / `entropy_bits_min` | 24 / 3.5 | Any value that passes both thresholds is redacted regardless of header name — the entropy check always runs, independent of `redact_sensitive_headers`. |
+| `sensitive_headers` | common auth headers | Header names whose values are redacted when `redact_sensitive_headers` is `true`. Has no effect when the flag is `false`. |
+| `redact_sensitive_headers` | **`false`** | When `false` (default), header values are returned as-is — you see the real tokens in inspection output. Set to `true` to mask values for any header in `sensitive_headers` with `<REDACTED len=N>`, which is useful when sharing output or working in a less trusted environment. |
+| `entropy_min_len` / `entropy_bits_min` | 24 / 3.5 | High-entropy opaque strings are redacted regardless of this flag. The entropy check is always on. |
 
 Note: `find_header` always returns raw values by design — it exists specifically to extract a value so you can pass it to `trace_value`.
 

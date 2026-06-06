@@ -30,7 +30,7 @@ log = logging.getLogger("har")
 _DEFAULT_CONFIG = {
     "sensitive_headers": ["authorization", "cookie", "set-cookie",
                           "x-csrf-token", "x-api-key", "proxy-authorization"],
-    "redact_sensitive_headers": True,
+    "redact_sensitive_headers": False,
     "entropy_min_len": 24,
     "entropy_bits_min": 3.5,
     "friendly_shorten": {},

@@ -2,7 +2,7 @@
   "sensitive_headers": [
     "authorization", "cookie", "set-cookie", "x-csrf-token", "x-api-key", "proxy-authorization"
   ],
-  "redact_sensitive_headers": true,
+  "redact_sensitive_headers": false,
   "entropy_min_len": 24,
   "entropy_bits_min": 3.5,
   "friendly_shorten": {}
