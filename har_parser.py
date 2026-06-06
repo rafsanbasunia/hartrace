@@ -30,6 +30,7 @@ log = logging.getLogger("har")
 _DEFAULT_CONFIG = {
     "sensitive_headers": ["authorization", "cookie", "set-cookie",
                           "x-csrf-token", "x-api-key", "proxy-authorization"],
+    "redact_sensitive_headers": True,
     "entropy_min_len": 24,
     "entropy_bits_min": 3.5,
     "friendly_shorten": {},
@@ -53,6 +54,7 @@ def _load_config() -> dict:
 
 _CONFIG = _load_config()
 SENSITIVE_HEADERS = {h.lower() for h in _CONFIG["sensitive_headers"]}
+REDACT_SENSITIVE_HEADERS: bool = bool(_CONFIG.get("redact_sensitive_headers", True))
 ENTROPY_MIN_LEN = int(_CONFIG["entropy_min_len"])
 ENTROPY_BITS_MIN = float(_CONFIG["entropy_bits_min"])
 FRIENDLY_SHORTEN = dict(_CONFIG.get("friendly_shorten") or {})
@@ -160,7 +162,8 @@ def _redact_str(s: str) -> str:
 def redact(obj: Any, _header_name: str | None = None) -> Any:
     """Recursively redact sensitive-header values and high-entropy strings."""
     if isinstance(obj, str):
-        if _header_name and _header_name.lower() in SENSITIVE_HEADERS:
+        if (REDACT_SENSITIVE_HEADERS
+                and _header_name and _header_name.lower() in SENSITIVE_HEADERS):
             return _redact_str(obj)
         if looks_secret(obj):
             return _redact_str(obj)
@@ -178,7 +181,8 @@ def redact_headers(headers: list[dict]) -> list[dict]:
     for h in headers or []:
         name = h.get("name", "")
         value = h.get("value", "")
-        if name.lower() in SENSITIVE_HEADERS or looks_secret(value):
+        if (REDACT_SENSITIVE_HEADERS and name.lower() in SENSITIVE_HEADERS) \
+                or looks_secret(value):
             value = _redact_str(value)
         out.append({"name": name, "value": value})
     return out

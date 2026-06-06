@@ -221,12 +221,19 @@ tests/          pytest suite
 ```json
 {
   "sensitive_headers": ["authorization", "cookie", "set-cookie", "x-csrf-token", "x-api-key"],
+  "redact_sensitive_headers": true,
   "entropy_min_len": 24,
   "entropy_bits_min": 3.5
 }
 ```
 
-`sensitive_headers` are always redacted by name; any other value is redacted if it exceeds `entropy_min_len` characters and `entropy_bits_min` bits of Shannon entropy per character.
+| Key | Default | Effect |
+| --- | --- | --- |
+| `sensitive_headers` | common auth headers | Header names to redact by name when `redact_sensitive_headers` is `true`. |
+| `redact_sensitive_headers` | `true` | When `true`, values for headers in `sensitive_headers` are replaced with `<REDACTED len=N>` in inspection output. Set to `false` to see raw values everywhere (useful when you trust your environment and need to inspect the actual tokens). |
+| `entropy_min_len` / `entropy_bits_min` | 24 / 3.5 | Any value that passes both thresholds is redacted regardless of header name — the entropy check always runs, independent of `redact_sensitive_headers`. |
+
+Note: `find_header` always returns raw values by design — it exists specifically to extract a value so you can pass it to `trace_value`.
 
 ---
 
