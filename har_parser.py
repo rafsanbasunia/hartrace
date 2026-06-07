@@ -161,9 +161,10 @@ def _redact_str(s: str) -> str:
 
 def redact(obj: Any, _header_name: str | None = None) -> Any:
     """Recursively redact sensitive-header values and high-entropy strings."""
+    if not REDACT_SENSITIVE_HEADERS:
+        return obj
     if isinstance(obj, str):
-        if (REDACT_SENSITIVE_HEADERS
-                and _header_name and _header_name.lower() in SENSITIVE_HEADERS):
+        if _header_name and _header_name.lower() in SENSITIVE_HEADERS:
             return _redact_str(obj)
         if looks_secret(obj):
             return _redact_str(obj)
@@ -177,12 +178,13 @@ def redact(obj: Any, _header_name: str | None = None) -> Any:
 
 
 def redact_headers(headers: list[dict]) -> list[dict]:
+    if not REDACT_SENSITIVE_HEADERS:
+        return list(headers or [])
     out = []
     for h in headers or []:
         name = h.get("name", "")
         value = h.get("value", "")
-        if (REDACT_SENSITIVE_HEADERS and name.lower() in SENSITIVE_HEADERS) \
-                or looks_secret(value):
+        if name.lower() in SENSITIVE_HEADERS or looks_secret(value):
             value = _redact_str(value)
         out.append({"name": name, "value": value})
     return out
