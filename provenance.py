@@ -75,10 +75,9 @@ def _u(req: dict) -> str:
 
 
 def _preview(value: str) -> str:
-    redacted = looks_secret(value)
     head = value[:8]
     tail = "…" if len(value) > 8 else ""
-    flag = ", redacted" if redacted else ""
+    flag = ", secret" if looks_secret(value) else ""
     return f"{head}{tail} (len {len(value)}{flag})"
 
 

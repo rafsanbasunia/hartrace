@@ -54,7 +54,7 @@ def _load_config() -> dict:
 
 _CONFIG = _load_config()
 SENSITIVE_HEADERS = {h.lower() for h in _CONFIG["sensitive_headers"]}
-REDACT_SENSITIVE_HEADERS: bool = bool(_CONFIG.get("redact_sensitive_headers", True))
+REDACT_SENSITIVE_HEADERS: bool = bool(_CONFIG.get("redact_sensitive_headers", False))
 ENTROPY_MIN_LEN = int(_CONFIG["entropy_min_len"])
 ENTROPY_BITS_MIN = float(_CONFIG["entropy_bits_min"])
 FRIENDLY_SHORTEN = dict(_CONFIG.get("friendly_shorten") or {})

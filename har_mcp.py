@@ -214,7 +214,8 @@ def get_request(har_name: str, index: int) -> dict:
             "headers": hp.redact_headers(req["headers"]),
             "params": hp.redact(req["params"]),
             "body": hp.redact(decoded_body) if isinstance(decoded_body, (dict, list))
-                    else (hp._redact_str(decoded_body) if hp.looks_secret(decoded_body)
+                    else (hp._redact_str(decoded_body)
+                          if hp.REDACT_SENSITIVE_HEADERS and hp.looks_secret(decoded_body)
                           else decoded_body),
         }
     return _guard(body)
